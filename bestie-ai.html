@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Beauty Bestie AI | Shophia Luxury</title>
+    <meta name="description" content="Chat with your Beauty Bestie AI for friendly makeup tips and love.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        shophia: {
+                            bg: '#0A0A0A',
+                            plum: '#4A0E2E',
+                            rose: '#8E5B6E',
+                            gold: '#D4AF37',
+                            silver: '#C0C0C0',
+                            white: '#FFFFFF',
+                            pink: '#FFB6C1',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 4s ease-in-out infinite',
+                        'bubble-pop': 'bubble-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+                        'heart-float': 'heart-float 1.5s ease-out forwards',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/css">
+        @layer base {
+            body {
+                background-color: #0A0A0A;
+                color: white;
+                font-family: 'Inter', sans-serif;
+                -webkit-font-smoothing: antialiased;
+                overflow-x: hidden;
+                min-height: 100vh;
+            }
+        }
+
+        .chat-container {
+            height: 400px;
+            scrollbar-width: none;
+        }
+
+        .chat-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        @keyframes bubble-pop {
+            0% {
+                opacity: 0;
+                transform: scale(0);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes heart-float {
+            0% {
+                transform: translateY(0) scale(0);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+                transform: translateY(-20px) scale(1.2);
+            }
+
+            100% {
+                transform: translateY(-100px) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        .heart {
+            position: absolute;
+            pointer-events: none;
+            z-index: 60;
+            color: #FFB6C1;
+            font-size: 20px;
+            animation: heart-float 1.5s ease-out forwards;
+        }
+
+        .glass-blur {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .suggestion-chip {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(142, 91, 110, 0.2);
+        }
+
+        .suggestion-chip:hover {
+            background: #8E5B6E;
+            border-color: #FFB6C1;
+            transform: scale(1.05);
+        }
+
+        .scroll-control-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(142, 91, 110, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0.6;
+            margin-bottom: 10px;
+        }
+
+        .scroll-control-btn:hover {
+            opacity: 1;
+            background: #8E5B6E;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+
+<body class="flex flex-col items-center relative py-32">
+
+    <nav class="fixed top-0 left-0 w-full z-[100] px-10 py-8 flex justify-between items-center mix-blend-difference">
+        <a href="index.html" class="font-serif italic text-3xl tracking-tighter">Shophia</a>
+        <a href="chatbot.html"
+            class="text-[10px] uppercase tracking-widest border-b border-white/20 hover:border-white transition-all">Back
+            to Lab</a>
+    </nav>
+
+    <!-- Main AI Stage -->
+    <div class="w-full max-w-2xl px-6 flex flex-col items-center">
+
+        <!-- Bestie Character -->
+        <div id="ai-character" class="w-48 h-48 mb-6 relative group">
+            <img src="The Beauty Bestie.PNG"
+                class="w-full h-full object-contain animate-float drop-shadow-[0_0_30px_rgba(142,91,110,0.3)]">
+            <div
+                class="absolute -inset-10 bg-shophia-rose/10 blur-[60px] rounded-full opacity-50 group-hover:opacity-100 transition-opacity">
+            </div>
+            <div id="heart-container" class="absolute inset-0"></div>
+        </div>
+
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-serif italic mb-2">The Beauty Bestie AI</h1>
+            <p class="text-shophia-pink uppercase tracking-[0.4em] text-[10px]">Your Glam BFF & Confidante 💖</p>
+        </div>
+
+        <!-- Chat History -->
+        <div class="relative w-full">
+            <div id="chat-box" class="w-full chat-container overflow-y-auto mb-8 space-y-6 px-4">
+                <div class="flex flex-col items-start message-bot">
+                    <div class="glass-blur p-5 rounded-2xl rounded-tl-none max-w-[85%] border border-shophia-pink/20">
+                        <p class="text-sm font-light leading-relaxed">Hey bestie! 💖 I'm so happy to see you! Ready to
+                            sparkle and shine today? Tell me everything—what's on your mind?</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scroll Controls -->
+            <div class="absolute -right-12 top-1/2 -translate-y-1/2 flex flex-col items-center">
+                <button onclick="scrollChat('up')" class="scroll-control-btn" aria-label="Scroll Up">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                    </svg>
+                </button>
+                <button onclick="scrollChat('down')" class="scroll-control-btn" aria-label="Scroll Down">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Suggestions -->
+        <div id="suggestions" class="w-full flex flex-wrap gap-3 justify-center mb-10">
+            <button onclick="askQuestion(this)"
+                class="suggestion-chip glass-blur px-5 py-3 rounded-full text-[10px] uppercase tracking-widest">
+                "What's your favorite look?"
+            </button>
+            <button onclick="askQuestion(this)"
+                class="suggestion-chip glass-blur px-5 py-3 rounded-full text-[10px] uppercase tracking-widest">
+                "I need some motivation!"
+            </button>
+            <button onclick="askQuestion(this)"
+                class="suggestion-chip glass-blur px-5 py-3 rounded-full text-[10px] uppercase tracking-widest">
+                "Quick makeup hack?"
+            </button>
+            <button onclick="askQuestion(this)"
+                class="suggestion-chip glass-blur px-5 py-3 rounded-full text-[10px] uppercase tracking-widest">
+                "Self-care tips?"
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const aiCharacter = document.getElementById('ai-character');
+        const heartContainer = document.getElementById('heart-container');
+
+        const responses = {
+            "what's your favorite look?": "Ooh, I'm currently obsessed with the 'Clean Girl' aesthetic! ✨ Just some dewy skin, a touch of blush, and a glossy lip. It's so effortless and chic, just like you, bestie!",
+            "i need some motivation!": "Listen to me, superstar: You are capable of amazing things! 🌟 Don't let anyone dull your shine. Put on your favorite lipstick and go conquer the world. I'm rooting for you! 💖",
+            "quick makeup hack?": "If you're in a rush, use your lipstick as a cream blush! 💄 Just dab a little on your cheeks and blend with your fingers for a perfectly coordinated, glowy look. It's a total game-changer!",
+            "self-care tips?": "You can't pour from an empty cup, sweetheart! 🛁 Take 15 minutes today for a face mask, some deep breathing, or just listening to your favorite song. You deserve to feel pampered! ✨"
+        };
+
+        function askQuestion(btn) {
+            const question = btn.innerText.replace(/"/g, '').trim().toLowerCase();
+
+            // Add User Message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'flex flex-col items-end message-user opacity-0';
+            userMsg.innerHTML = `
+                <div class="bg-shophia-rose/40 border border-shophia-pink/30 p-5 rounded-2xl rounded-tr-none max-w-[85%]">
+                    <p class="text-sm font-light text-shophia-silver italic leading-relaxed">${btn.innerText}</p>
+                </div>
+            `;
+            chatBox.appendChild(userMsg);
+
+            setTimeout(() => userMsg.classList.add('animate-bubble-pop'), 50);
+            scrollToBottom();
+
+            // Bot Reply Logic
+            setTimeout(() => {
+                const answer = responses[question] || "Aww, tell me more about that, bestie! I'm all ears! 💖";
+                botReply(answer);
+            }, 800);
+        }
+
+        function botReply(text) {
+            // 1. Create Hearts
+            for (let i = 0; i < 8; i++) {
+                createHeart();
+            }
+
+            // 2. Character Bounce
+            aiCharacter.style.transform = 'scale(1.1) translateY(-10px)';
+            setTimeout(() => aiCharacter.style.transform = 'scale(1) translateY(0)', 300);
+
+            // 3. Message Bubble
+            const botMsg = document.createElement('div');
+            botMsg.className = 'flex flex-col items-start message-bot opacity-0';
+            botMsg.innerHTML = `
+                <div class="glass-blur p-5 rounded-2xl rounded-tl-none max-w-[85%] border-l-4 border-shophia-pink shadow-[0_10px_40px_rgba(142,91,110,0.2)]">
+                    <p class="text-sm font-light leading-relaxed font-sans">${text}</p>
+                </div>
+            `;
+            chatBox.appendChild(botMsg);
+
+            setTimeout(() => botMsg.classList.add('animate-bubble-pop'), 50);
+            scrollToBottom();
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = ['💖', '✨', '🌸', '💕'][Math.floor(Math.random() * 4)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.top = Math.random() * 100 + '%';
+            heartContainer.appendChild(heart);
+            setTimeout(() => heart.remove(), 1500);
+        }
+
+        function scrollToBottom() {
+            chatBox.scrollTo({
+                top: chatBox.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
+        function scrollChat(direction) {
+            const scrollAmount = 200;
+            if (direction === 'up') {
+                chatBox.scrollBy({ top: -scrollAmount, behavior: 'smooth' });
+            } else {
+                chatBox.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+            }
+        }
+    </script>
+</body>
+
+</html>

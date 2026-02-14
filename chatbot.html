@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Core | Shophia Luxury</title>
+    <meta name="description" content="Explore luxury chatbot personality and icon styles for Shophia.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        shophia: {
+                            bg: '#0F0F0F',
+                            plum: '#4A0E2E',
+                            rose: '#8E5B6E',
+                            gold: '#D4AF37',
+                            silver: '#C0C0C0',
+                            white: '#FFFFFF',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+                        'bounce-soft': 'bounce-soft 2s ease-in-out infinite',
+                        'sparkle': 'sparkle 1.5s linear infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/css">
+        @layer base {
+            body {
+                background-color: #0F0F0F;
+                color: white;
+                font-family: 'Inter', sans-serif;
+                -webkit-font-smoothing: antialiased;
+                overflow-x: hidden;
+            }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(142, 91, 110, 0.3);
+            transform: translateY(-5px);
+        }
+
+        /* Animations */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(74, 14, 46, 0.2);
+            }
+
+            50% {
+                box-shadow: 0 0 40px rgba(142, 91, 110, 0.5);
+            }
+        }
+
+        @keyframes sparkle {
+
+            0%,
+            100% {
+                opacity: 0;
+                transform: scale(0.5) rotate(0deg);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.2) rotate(180deg);
+            }
+        }
+
+        @keyframes wave {
+
+            0%,
+            100% {
+                transform: rotate(0);
+            }
+
+            20% {
+                transform: rotate(15deg);
+            }
+
+            40% {
+                transform: rotate(-10deg);
+            }
+
+            60% {
+                transform: rotate(10deg);
+            }
+
+            80% {
+                transform: rotate(-5deg);
+            }
+        }
+
+        @keyframes vibration {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-2px);
+            }
+
+            50% {
+                transform: translateX(2px);
+            }
+
+            75% {
+                transform: translateX(-2px);
+            }
+        }
+
+        .animate-wave {
+            animation: wave 1.5s ease-in-out;
+        }
+
+        .animate-vibration {
+            animation: vibration 0.2s linear infinite;
+        }
+
+        /* 3D Tilt Effect */
+        .tilt-container {
+            perspective: 1000px;
+        }
+
+        .tilt-inner {
+            transition: transform 0.3s ease;
+            transform-style: preserve-3d;
+        }
+
+        .tilt-container:hover .tilt-inner {
+            transform: rotateX(10deg) rotateY(10deg);
+        }
+
+        /* Talking mouth animation */
+        .mouth-talk {
+            animation: talk 0.3s ease-in-out infinite;
+        }
+
+        @keyframes talk {
+
+            0%,
+            100% {
+                height: 2px;
+            }
+
+            50% {
+                height: 8px;
+            }
+        }
+
+        /* Lipstick Glow */
+        .lipstick-shine {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, transparent 50%);
+        }
+
+        /* 3D Robot Animation */
+        .robot-orbit {
+            width: 500px;
+            height: 500px;
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            perspective: 1000px;
+        }
+
+        .robot-core {
+            width: 280px;
+            height: 280px;
+            background: linear-gradient(135deg, rgba(74, 14, 46, 0.4) 0%, rgba(142, 91, 110, 0.2) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            animation: robot-float 6s ease-in-out infinite, robot-rotate 12s linear infinite;
+            transform-style: preserve-3d;
+            box-shadow: 0 0 80px rgba(74, 14, 46, 0.4);
+        }
+
+        .robot-ring {
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 50%;
+            animation: ring-rotate 10s linear infinite;
+        }
+
+        .robot-ring::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            background: #D4AF37;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #D4AF37;
+        }
+
+        @keyframes robot-float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotateY(0deg);
+            }
+
+            50% {
+                transform: translateY(-30px) rotateY(180deg);
+            }
+        }
+
+        @keyframes robot-rotate {
+            from {
+                transform: rotateX(0deg) rotateY(0deg);
+            }
+
+            to {
+                transform: rotateX(360deg) rotateY(360deg);
+            }
+        }
+
+        @keyframes ring-rotate {
+            from {
+                transform: rotateX(70deg) rotateZ(0deg);
+            }
+
+            to {
+                transform: rotateX(70deg) rotateZ(360deg);
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0F0F0F;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4A0E2E;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body class="bg-shophia-bg px-6 md:px-20 py-20">
+
+    <nav class="fixed top-0 left-0 w-full z-[100] px-10 py-8 flex justify-between items-center mix-blend-difference">
+        <a href="index.html" class="font-serif italic text-3xl tracking-tighter">Shophia</a>
+        <a href="index.html"
+            class="text-[10px] uppercase tracking-widest border-b border-white/20 hover:border-white transition-all">Back
+            to Home</a>
+    </nav>
+
+    <header class="max-w-6xl mb-32 pt-20 flex flex-col md:flex-row items-center justify-between relative">
+        <div class="max-w-2xl">
+            <h4 class="text-shophia-rose uppercase tracking-[0.5em] text-[10px] mb-6 font-bold">Innovation Lab</h4>
+            <h1 class="text-6xl md:text-8xl font-serif italic mb-8 leading-tight">Identity of the<br><span
+                    class="pl-20">Assistant.</span></h1>
+            <p class="text-shophia-silver text-lg leading-relaxed font-light">
+                Designing the soul of Shophia's AI. Choose a personality that resonates with luxury, sparkle, and
+                unmatched
+                beauty expertise.
+            </p>
+        </div>
+
+        <div class="hidden lg:block relative w-[600px] h-[600px]">
+            <div class="robot-orbit group">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="robot-core p-6">
+                        <img src="Chat Ai.jpeg"
+                            class="w-full h-full object-contain drop-shadow-[0_0_50px_rgba(255,255,255,0.4)]">
+                    </div>
+                </div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="robot-ring"></div>
+                </div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="robot-ring"
+                        style="animation-duration: 15s; animation-direction: reverse; width: 480px; height: 480px;">
+                    </div>
+                </div>
+                <!-- Particles -->
+                <div class="absolute top-10 right-10 w-2 h-2 bg-shophia-rose rounded-full animate-ping"></div>
+                <div class="absolute bottom-20 left-10 w-1 h-1 bg-shophia-gold rounded-full animate-pulse"></div>
+            </div>
+        </div>
+    </header>
+
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+
+        <!-- style 1: 3D Lipstick -->
+        <a href="lipstick-ai.html"
+            class="glass-card p-10 rounded-2xl flex flex-col items-center text-center group cursor-pointer block border border-transparent hover:border-shophia-rose/30">
+            <div class="w-40 h-40 mb-10 relative tilt-container">
+                <div class="tilt-inner w-full h-full flex items-center justify-center">
+                    <img src="The Signature Lipstick.PNG" class="w-full h-full object-contain animate-float">
+                </div>
+            </div>
+            <h3 class="font-serif text-2xl mb-4 italic">The Signature Lipstick</h3>
+            <p class="text-shophia-silver text-[10px] uppercase tracking-widest mb-8">Glossy • Floating • Feminine</p>
+            <div class="mt-auto flex flex-col items-center gap-4">
+                <div class="flex gap-4">
+                    <span class="w-2 h-2 rounded-full bg-shophia-plum animate-pulse"></span>
+                    <span class="text-[9px] uppercase tracking-widest text-white/40">Ideal for: Beauty Vibe</span>
+                </div>
+                <span
+                    class="text-[8px] uppercase tracking-[0.4em] text-shophia-rose opacity-0 group-hover:opacity-100 transition-all font-bold">Launch
+                    Chat →</span>
+            </div>
+        </a>
+
+        <!-- style 2: 3D Female Avatar -->
+        <a href="bestie-ai.html"
+            class="glass-card p-10 rounded-2xl flex flex-col items-center text-center group cursor-pointer block border border-transparent hover:border-shophia-pink/30">
+            <div class="w-40 h-40 mb-10 relative">
+                <div class="w-full h-full flex items-center justify-center relative overflow-hidden animate-float">
+                    <img src="The Beauty Bestie.PNG" class="w-full h-full object-contain">
+                </div>
+                <div class="absolute -bottom-2 -right-2 bg-shophia-plum p-2 rounded-full rotate-12 shadow-xl">
+                    <span class="text-xs">👋</span>
+                </div>
+            </div>
+            <h3 class="font-serif text-2xl mb-4 italic">The Beauty Bestie</h3>
+            <p class="text-shophia-silver text-[10px] uppercase tracking-widest mb-8">Animated • Friendly • Human</p>
+            <div class="mt-auto flex flex-col items-center gap-4">
+                <div class="flex gap-4">
+                    <button
+                        class="bg-white/5 px-6 py-2 rounded-full text-[9px] uppercase tracking-widest hover:bg-shophia-plum transition-all">Preview
+                        Animation</button>
+                </div>
+                <span
+                    class="text-[8px] uppercase tracking-[0.4em] text-shophia-pink opacity-0 group-hover:opacity-100 transition-all font-bold">Launch
+                    Chat 💖</span>
+            </div>
+        </a>
+
+        <!-- style 3: Makeup Brush Wand -->
+        <a href="magic-ai.html"
+            class="glass-card p-10 rounded-2xl flex flex-col items-center text-center group cursor-pointer block border border-transparent hover:border-shophia-gold/30">
+            <div class="w-40 h-40 mb-10 relative flex items-center justify-center">
+                <img src="Magic Transformation.PNG"
+                    class="w-full h-full object-contain animate-bounce-soft relative z-10">
+                <div class="absolute inset-0">
+                    <span class="absolute top-0 right-10 text-shophia-gold animate-sparkle">✨</span>
+                    <span class="absolute bottom-10 left-5 text-shophia-gold animate-sparkle"
+                        style="animation-delay: 0.5s">✨</span>
+                    <span class="absolute top-20 left-12 text-shophia-gold animate-sparkle"
+                        style="animation-delay: 1s">✨</span>
+                </div>
+                <div
+                    class="absolute inset-0 bg-shophia-gold/10 blur-3xl rounded-full scale-50 group-hover:scale-100 transition-transform">
+                </div>
+            </div>
+            <h3 class="font-serif text-2xl mb-4 italic">Magic Transformation</h3>
+            <p class="text-shophia-silver text-[10px] uppercase tracking-widest mb-8">Sparkling • Creative • Glam</p>
+            <div class="mt-auto flex flex-col items-center gap-4">
+                <div class="h-[1px] w-20 bg-shophia-gold/30"></div>
+                <span
+                    class="text-[8px] uppercase tracking-[0.4em] text-shophia-gold opacity-0 group-hover:opacity-100 transition-all font-bold">Launch
+                    Magic ✨</span>
+            </div>
+        </a>
+
+    </section>
+
+
+    <footer class="mt-40 pt-20 border-t border-white/5 text-center">
+        <p class="text-[9px] uppercase tracking-[0.5em] text-white/20">Designed for Shophia Luxury Retail • 2026</p>
+    </footer>
+
+    <script>
+        // Trigger social wave every 5 seconds
+        setInterval(() => {
+            const icons = document.querySelectorAll('.text-xs');
+            icons.forEach(icon => {
+                if (icon.innerText === '👋') {
+                    icon.parentElement.classList.add('animate-wave');
+                    setTimeout(() => icon.parentElement.classList.remove('animate-wave'), 1500);
+                }
+            });
+        }, 5000);
+
+        // Interaction for feedback animation
+        function adoptStyle() {
+            document.body.classList.add('animate-vibration');
+            setTimeout(() => document.body.classList.remove('animate-vibration'), 500);
+        }
+    </script>
+</body>
+
+</html>
