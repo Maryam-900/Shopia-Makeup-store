@@ -70,6 +70,5 @@ For immediate lab exploration, use the master credentials:
 - **User**: `admin@shophia.com`
 - **Pass**: `luxury2026`
 
----
 
-*Designed with ❤️ by the Shophia Innovation Team*
+
