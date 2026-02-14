@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signature Lipstick AI | Shophia Luxury</title>
+    <meta name="description" content="Chat with Shophia's Signature Lipstick AI for expert beauty advice.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        shophia: {
+                            bg: '#0A0A0A',
+                            plum: '#4A0E2E',
+                            rose: '#8E5B6E',
+                            gold: '#D4AF37',
+                            silver: '#C0C0C0',
+                            white: '#FFFFFF',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 4s ease-in-out infinite',
+                        'bubble-pop': 'bubble-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+                        'flash': 'flash 0.5s ease-out forwards',
+                        'vibrate': 'vibrate 0.1s linear 3',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/css">
+        @layer base {
+            body {
+                background-color: #0A0A0A;
+                color: white;
+                font-family: 'Inter', sans-serif;
+                -webkit-font-smoothing: antialiased;
+                overflow-x: hidden;
+                min-height: 100vh;
+            }
+        }
+
+        .chat-container {
+            height: 400px;
+            scrollbar-width: none;
+        }
+
+        .chat-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes bubble-pop {
+            0% {
+                opacity: 0;
+                transform: scale(0.5) translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes flash {
+            0% {
+                opacity: 0;
+                background: white;
+            }
+
+            50% {
+                opacity: 0.5;
+                background: white;
+            }
+
+            100% {
+                opacity: 0;
+                background: transparent;
+            }
+        }
+
+        @keyframes vibrate {
+            0% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-4px);
+            }
+
+            50% {
+                transform: translateX(4px);
+            }
+
+            75% {
+                transform: translateX(-4px);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        .glass-blur {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .suggestion-chip {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(142, 91, 110, 0.2);
+        }
+
+        .suggestion-chip:hover {
+            background: #4A0E2E;
+            border-color: #8E5B6E;
+            transform: scale(1.05);
+        }
+
+        .flash-overlay {
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .scroll-control-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(142, 91, 110, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0.6;
+            margin-bottom: 10px;
+        }
+
+        .scroll-control-btn:hover {
+            opacity: 1;
+            background: #4A0E2E;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+
+<body class="flex flex-col items-center relative py-32">
+
+    <!-- Light Flash Overlay -->
+    <div id="flash-effect" class="fixed inset-0 flash-overlay opacity-0"></div>
+
+    <nav class="fixed top-0 left-0 w-full z-[100] px-10 py-8 flex justify-between items-center mix-blend-difference">
+        <a href="index.html" class="font-serif italic text-3xl tracking-tighter">Shophia</a>
+        <a href="chatbot.html"
+            class="text-[10px] uppercase tracking-widest border-b border-white/20 hover:border-white transition-all">Back
+            to Lab</a>
+    </nav>
+
+    <!-- Main AI Stage -->
+    <div class="w-full max-w-2xl px-6 flex flex-col items-center">
+
+        <!-- Lipstick Character -->
+        <div id="ai-character" class="w-48 h-48 mb-6 relative group">
+            <img src="The Signature Lipstick.PNG"
+                class="w-full h-full object-contain animate-float drop-shadow-[0_0_30px_rgba(74,14,46,0.3)]">
+            <div
+                class="absolute -inset-10 bg-shophia-plum/10 blur-[60px] rounded-full opacity-50 group-hover:opacity-100 transition-opacity">
+            </div>
+        </div>
+
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-serif italic mb-2">Signature Lipstick AI</h1>
+            <p class="text-shophia-rose uppercase tracking-[0.4em] text-[10px]">Your Dedicated Beauty Concierge</p>
+        </div>
+
+        <!-- Chat History -->
+        <div class="relative w-full">
+            <div id="chat-box" class="w-full chat-container overflow-y-auto mb-8 space-y-6 px-4">
+                <div class="flex flex-col items-start message-bot">
+                    <div class="glass-blur p-5 rounded-2xl rounded-tl-none max-w-[85%]">
+                        <p class="text-sm font-light leading-relaxed">Hello darling. I'm your Shophia Muse. I've been
+                            designed to help you discover your perfect radiance. What shall we explore today?</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scroll Controls -->
+            <div class="absolute -right-12 top-1/2 -translate-y-1/2 flex flex-col items-center">
+                <button onclick="scrollChat('up')" class="scroll-control-btn" aria-label="Scroll Up">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                    </svg>
+                </button>
+                <button onclick="scrollChat('down')" class="scroll-control-btn" aria-label="Scroll Down">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Suggestions -->
+        <div id="suggestions" class="w-full flex flex-wrap gap-3 justify-center mb-10">
+            <button onclick="askQuestion(this)"
+                class="suggestion-chip glass-blur px-5 py-3 rounded-full text-[10px] uppercase tracking-widest">
+                "Best shade for a night out?"
+            </button>
+            <button onclick="askQuestion(this)"
+                class="suggestion-chip glass-blur px-5 py-3 rounded-full text-[10px] uppercase tracking-widest">
+                "Tell me about the formulation"
+            </button>
+            <button onclick="askQuestion(this)"
+                class="suggestion-chip glass-blur px-5 py-3 rounded-full text-[10px] uppercase tracking-widest">
+                "Are products cruelty-free?"
+            </button>
+            <button onclick="askQuestion(this)"
+                class="suggestion-chip glass-blur px-5 py-3 rounded-full text-[10px] uppercase tracking-widest">
+                "Long-lasting tips?"
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const flashEffect = document.getElementById('flash-effect');
+        const aiCharacter = document.getElementById('ai-character');
+
+        const responses = {
+            "best shade for a night out?": "Darling, for a dazzling night look, I recommend shades that make your lips pop under the lights. A deep crimson, a sultry berry, or a bold ruby will make you feel confident and glamorous. Pair it with a soft neutral eye for balance — and watch the magic happen!",
+            "tell me about the formulation": "Our lipsticks are crafted with ultra-hydrating ingredients like shea butter and vitamin E to keep your lips soft and smooth. Each shade blends effortlessly and provides a rich, vibrant color that glides on like silk. Beauty and comfort, darling — we believe you deserve both!",
+            "are products cruelty-free?": "Absolutely! Every product in our collection is 100% cruelty-free. We love our furry friends just as much as you do, so no animal testing is ever involved. You can glam up with a clear conscience, sweetheart!",
+            "long-lasting tips?": "To make your lipstick last all night: start with a lip balm, then lightly blot before applying the first layer. Use a lip liner to define and lock in color, then top with your lipstick. For extra endurance, gently set with a thin layer of translucent powder. Voilà — perfect pout all night!"
+        };
+
+        function askQuestion(btn) {
+            const question = btn.innerText.replace(/"/g, '').trim().toLowerCase();
+
+            // Add User Message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'flex flex-col items-end message-user opacity-0';
+            userMsg.innerHTML = `
+                <div class="bg-shophia-plum/40 border border-shophia-rose/30 p-5 rounded-2xl rounded-tr-none max-w-[85%]">
+                    <p class="text-sm font-light text-shophia-silver italic leading-relaxed">${question}</p>
+                </div>
+            `;
+            chatBox.appendChild(userMsg);
+
+            // Animation for user message
+            setTimeout(() => userMsg.classList.add('animate-bubble-pop'), 50);
+
+            // Scroll to bottom
+            scrollToBottom();
+
+            // Bot Reply Logic
+            setTimeout(() => {
+                botReply(responses[question] || "That's a fascinating thought. Let me consult my beauty minerals for you.");
+            }, 1000);
+        }
+
+        function botReply(text) {
+            // 1. Light Flash Effect
+            flashEffect.classList.remove('animate-flash');
+            void flashEffect.offsetWidth; // Trigger reflow
+            flashEffect.classList.add('animate-flash');
+
+            // 2. Gentle Vibration
+            document.body.classList.remove('animate-vibrate');
+            void document.body.offsetWidth;
+            document.body.classList.add('animate-vibrate');
+
+            // 3. AI Character reaction
+            aiCharacter.style.transform = 'scale(1.1)';
+            setTimeout(() => aiCharacter.style.transform = 'scale(1)', 200);
+
+            // 4. Bubble Pop Animation for Bot
+            const botMsg = document.createElement('div');
+            botMsg.className = 'flex flex-col items-start message-bot opacity-0';
+            botMsg.innerHTML = `
+                <div class="glass-blur p-5 rounded-2xl rounded-tl-none max-w-[85%] border-l-2 border-shophia-rose shadow-[0_10px_40px_rgba(74,14,46,0.4)]">
+                    <p class="text-sm font-light leading-relaxed">${text}</p>
+                </div>
+            `;
+            chatBox.appendChild(botMsg);
+
+            setTimeout(() => botMsg.classList.add('animate-bubble-pop'), 50);
+
+            scrollToBottom();
+
+            // Remove vibration class after it finishes
+            setTimeout(() => document.body.classList.remove('animate-vibrate'), 500);
+        }
+
+        function scrollToBottom() {
+            chatBox.scrollTo({
+                top: chatBox.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
+        function scrollChat(direction) {
+            const scrollAmount = 200;
+            if (direction === 'up') {
+                chatBox.scrollBy({
+                    top: -scrollAmount,
+                    behavior: 'smooth'
+                });
+            } else {
+                chatBox.scrollBy({
+                    top: scrollAmount,
+                    behavior: 'smooth'
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>

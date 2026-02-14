@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic Transformation AI | Shophia Luxury</title>
+    <meta name="description" content="Experience the Magic Transformation AI for creative makeup artistry and glam.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        shophia: {
+                            bg: '#0A0A0A',
+                            plum: '#4A0E2E',
+                            rose: '#8E5B6E',
+                            gold: '#D4AF37',
+                            silver: '#C0C0C0',
+                            white: '#FFFFFF',
+                            softGold: '#FFD700',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 4s ease-in-out infinite',
+                        'bubble-pop': 'bubble-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+                        'sparkle-float': 'sparkle-float 2s ease-out forwards',
+                        'rotate-glow': 'rotate-glow 10s linear infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/css">
+        @layer base {
+            body {
+                background-color: #0A0A0A;
+                color: white;
+                font-family: 'Inter', sans-serif;
+                -webkit-font-smoothing: antialiased;
+                overflow-x: hidden;
+                min-height: 100vh;
+            }
+        }
+
+        .chat-container {
+            height: 400px;
+            scrollbar-width: none;
+        }
+
+        .chat-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-15px) rotate(5deg);
+            }
+        }
+
+        @keyframes bubble-pop {
+            0% {
+                opacity: 0;
+                transform: scale(0);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes sparkle-float {
+            0% {
+                transform: translateY(0) scale(0) rotate(0deg);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+                transform: translateY(-15px) scale(1.2) rotate(45deg);
+            }
+
+            100% {
+                transform: translateY(-80px) scale(0.5) rotate(180deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes rotate-glow {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .sparkle {
+            position: absolute;
+            pointer-events: none;
+            z-index: 60;
+            font-size: 14px;
+            animation: sparkle-float 2s ease-out forwards;
+        }
+
+        .glass-blur {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .magic-bubble {
+            background: #4A0E2E;
+            border-left: 3px solid #C0C0C0;
+            box-shadow: 0 0 20px rgba(192, 192, 192, 0.2);
+            position: relative;
+        }
+
+        .suggestion-chip {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .suggestion-chip:hover {
+            background: #D4AF37;
+            color: #0A0A0A;
+            transform: scale(1.05);
+        }
+
+        .scroll-control-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(212, 175, 55, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0.6;
+            margin-bottom: 10px;
+        }
+
+        .scroll-control-btn:hover {
+            opacity: 1;
+            background: #D4AF37;
+            color: #0A0A0A;
+            transform: scale(1.1);
+        }
+
+        .wand-glow {
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+        }
+    </style>
+</head>
+
+<body class="flex flex-col items-center relative py-32">
+
+    <nav class="fixed top-0 left-0 w-full z-[100] px-10 py-8 flex justify-between items-center mix-blend-difference">
+        <a href="index.html" class="font-serif italic text-3xl tracking-tighter">Shophia</a>
+        <a href="chatbot.html"
+            class="text-[10px] uppercase tracking-widest border-b border-white/20 hover:border-white transition-all">Back
+            to Lab</a>
+    </nav>
+
+    <!-- Main AI Stage -->
+    <div class="w-full max-w-2xl px-6 flex flex-col items-center">
+
+        <!-- Magic Wand Character -->
+        <div id="ai-character" class="w-48 h-48 mb-6 relative group">
+            <div class="absolute inset-0 wand-glow rounded-full animate-pulse"></div>
+            <img src="Magic Transformation.PNG"
+                class="w-full h-full object-contain animate-float drop-shadow-[0_0_30px_rgba(212,175,55,0.3)] relative z-10">
+            <div class="absolute -inset-10 border border-shophia-gold/10 rounded-full animate-rotate-glow opacity-30">
+            </div>
+        </div>
+
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-serif italic mb-2">Magic Transformation AI</h1>
+            <p class="text-shophia-gold uppercase tracking-[0.4em] text-[10px]">Artistry & Glamour Await ✨</p>
+        </div>
+
+        <!-- Chat History -->
+        <div class="relative w-full">
+            <div id="chat-box" class="w-full chat-container overflow-y-auto mb-8 space-y-6 px-4">
+                <div class="flex flex-col items-start message-bot">
+                    <div class="magic-bubble p-5 rounded-2xl rounded-tl-none max-w-[85%]">
+                        <p class="text-sm font-light leading-relaxed">The magic is in your hands, darling. ✨ I am the
+                            Magic Transformation AI, ready to turn your beauty vision into reality. How shall we
+                            transform you today?</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scroll Controls -->
+            <div class="absolute -right-12 top-1/2 -translate-y-1/2 flex flex-col items-center">
+                <button onclick="scrollChat('up')" class="scroll-control-btn" aria-label="Scroll Up">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                    </svg>
+                </button>
+                <button onclick="scrollChat('down')" class="scroll-control-btn" aria-label="Scroll Down">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Suggestions -->
+        <div id="suggestions" class="w-full flex flex-wrap gap-3 justify-center mb-10">
+            <button onclick="askQuestion(this)"
+                class="suggestion-chip glass-blur px-5 py-3 rounded-full text-[10px] uppercase tracking-widest">
+                "Show me a glam transformation"
+            </button>
+            <button onclick="askQuestion(this)"
+                class="suggestion-chip glass-blur px-5 py-3 rounded-full text-[10px] uppercase tracking-widest">
+                "What is the secret to radiance?"
+            </button>
+            <button onclick="askQuestion(this)"
+                class="suggestion-chip glass-blur px-5 py-3 rounded-full text-[10px] uppercase tracking-widest">
+                "Creative editorial tips?"
+            </button>
+            <button onclick="askQuestion(this)"
+                class="suggestion-chip glass-blur px-5 py-3 rounded-full text-[10px] uppercase tracking-widest">
+                "The power of shimmer?"
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const aiCharacter = document.getElementById('ai-character');
+
+        const responses = {
+            "show me a glam transformation": "Imagine a deep smoky eye paired with a bold metallic lip. ✨ Through the power of contrast, we create a look that is both mysterious and magnetic. Your transformation begins now.",
+            "what is the secret to radiance?": "It's all in the light, darling. A well-placed highlighter on the high points of the face can transform your entire look into a luminous masterpiece. ✨",
+            "creative editorial tips?": "Don't be afraid to break the rules. ✨ Use a lip gloss on the eyelids for a wet look, or create a gradient lip using colors you've never paired before. Artistry has no limits.",
+            "the power of shimmer?": "Shimmer is like stardust for the soul. ✨ It adds dimension where there was none and captures the essence of glamour with every turn of your head."
+        };
+
+        function askQuestion(btn) {
+            const question = btn.innerText.replace(/"/g, '').trim().toLowerCase();
+
+            // Add User Message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'flex flex-col items-end message-user opacity-0';
+            userMsg.innerHTML = `
+                <div class="bg-shophia-silver/10 border border-shophia-gold/20 p-5 rounded-2xl rounded-tr-none max-w-[85%]">
+                    <p class="text-sm font-light text-shophia-silver italic leading-relaxed">${btn.innerText}</p>
+                </div>
+            `;
+            chatBox.appendChild(userMsg);
+
+            setTimeout(() => userMsg.classList.add('animate-bubble-pop'), 50);
+            scrollToBottom();
+
+            // Bot Reply Logic
+            setTimeout(() => {
+                const answer = responses[question] || "A transformation is waiting just around the corner, darling. ✨ Tell me more.";
+                botReply(answer);
+            }, 800);
+        }
+
+        function botReply(text) {
+            // 1. Character Magic Pulse
+            aiCharacter.style.transform = 'scale(1.15) rotate(15deg)';
+            setTimeout(() => aiCharacter.style.transform = 'scale(1) rotate(0deg)', 400);
+
+            // 2. Message Bubble
+            const botMsgWrapper = document.createElement('div');
+            botMsgWrapper.className = 'flex flex-col items-start message-bot relative';
+
+            const botMsg = document.createElement('div');
+            botMsg.className = 'magic-bubble p-5 rounded-2xl rounded-tl-none max-w-[85%] opacity-0';
+            botMsg.innerHTML = `<p class="text-sm font-light leading-relaxed font-sans">${text}</p>`;
+
+            botMsgWrapper.appendChild(botMsg);
+            chatBox.appendChild(botMsgWrapper);
+
+            setTimeout(() => {
+                botMsg.classList.add('animate-bubble-pop');
+                // Create Sparkles around the bubble
+                for (let i = 0; i < 10; i++) {
+                    createSparkle(botMsgWrapper);
+                }
+            }, 50);
+
+            scrollToBottom();
+        }
+
+        function createSparkle(container) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            // Use muted rose and soft gold
+            const isRose = Math.random() > 0.5;
+            sparkle.style.color = isRose ? '#8E5B6E' : '#FFD700';
+            sparkle.innerHTML = isRose ? '✧' : '✨';
+
+            const rect = container.getBoundingClientRect();
+            sparkle.style.left = Math.random() * 80 + '%';
+            sparkle.style.bottom = '20px';
+
+            container.appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 2000);
+        }
+
+        function scrollToBottom() {
+            chatBox.scrollTo({
+                top: chatBox.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
+        function scrollChat(direction) {
+            const scrollAmount = 200;
+            if (direction === 'up') {
+                chatBox.scrollBy({ top: -scrollAmount, behavior: 'smooth' });
+            } else {
+                chatBox.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shophia | Luxury Beauty Redefined</title>
+    <meta name="description" content="Sultry, bold, and sophisticated. Discover the Shophia luxury makeup collection.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Auth Guard
+        if (localStorage.getItem('shophia_logged_in') !== 'true') {
+            window.location.href = "login.html";
+        }
+
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        shophia: {
+                            bg: '#1A1A1A',
+                            plum: '#4A0E2E',
+                            rose: '#8E5B6E',
+                            silver: '#C0C0C0',
+                            white: '#FFFFFF',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style type="text/css">
+        @layer base {
+            body {
+                background-color: #1A1A1A;
+                color: white;
+                font-family: 'Inter', sans-serif;
+                -webkit-font-smoothing: antialiased;
+                overflow-x: hidden;
+            }
+
+            ::-webkit-scrollbar {
+                width: 6px;
+            }
+
+            ::-webkit-scrollbar-track {
+                background: #1A1A1A;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: #4A0E2E;
+                border-radius: 10px;
+            }
+        }
+
+        /* Navigation Smoothing */
+        nav {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-scrolled {
+            padding-top: 1rem !important;
+            padding-bottom: 1rem !important;
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(192, 192, 192, 0.1);
+        }
+
+        .logo-text {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-scrolled .logo-text {
+            font-size: 1.5rem !important;
+        }
+
+        /* Cart Drawer */
+        #cart-drawer {
+            transform: translateX(100%);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        #cart-drawer.open {
+            transform: translateX(0);
+        }
+
+        #cart-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s ease;
+        }
+
+        #cart-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Hero */
+        .hero-canvas-container {
+            height: 400vh;
+            background-color: #1A1A1A;
+        }
+
+        .sticky-canvas-wrapper {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        #hero-canvas {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            will-change: transform;
+        }
+
+        /* Category Horizontal Scroll */
+        .category-card {
+            min-width: 450px;
+            height: 600px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .category-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .category-overlay {
+            background: linear-gradient(to top, #8E5B6E 0%, transparent 100%);
+            opacity: 0.4;
+            transition: opacity 0.5s ease;
+        }
+
+        .category-card:hover .category-overlay {
+            opacity: 0.8;
+        }
+
+        /* Makers Split Screen */
+        .makers-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        @media (max-width: 1024px) {
+            .makers-section {
+                grid-template-columns: 1fr;
+            }
+
+            .makers-sticky {
+                height: 50vh !important;
+                position: relative !important;
+            }
+        }
+
+        .makers-sticky {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Quick Add Button Animation */
+        .quick-add {
+            transform: translateY(100%);
+            transition: transform 0.4s ease;
+        }
+
+        .product-group:hover .quick-add {
+            transform: translateY(0);
+        }
+
+        /* Feedback Toast */
+        #feedback-toast {
+            transform: translateX(120%);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        #feedback-toast.show {
+            transform: translateX(0);
+        }
+
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .active-fade {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scroll to Top Arrow - Reimagined Look */
+        #scroll-top-btn {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 65px;
+            height: 65px;
+            background: rgba(74, 14, 46, 0.9);
+            backdrop-filter: blur(15px);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(40px) rotate(15deg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        #scroll-top-btn.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) rotate(0deg);
+        }
+
+        #scroll-top-btn:hover {
+            background: white;
+            color: #4A0E2E;
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+            border-color: #4A0E2E;
+        }
+
+        #scroll-top-btn svg {
+            transition: transform 0.4s ease;
+        }
+
+        #scroll-top-btn:hover svg {
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+
+<body class="bg-shophia-bg">
+
+    <!-- Navbar -->
+    <nav
+        class="fixed top-0 w-full z-50 flex justify-between items-center px-10 py-8 mix-blend-difference border-b border-[#C0C0C0]/10">
+        <div class="flex gap-10 text-xs uppercase tracking-[0.25em] font-sans">
+            <a href="index.html" class="hover:text-shophia-rose transition-colors relative group">
+                Home
+                <span
+                    class="absolute -bottom-1 left-1/2 w-0 h-[1px] bg-shophia-plum transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
+            </a>
+            <a href="collection.html" class="hover:text-shophia-rose transition-colors relative group">
+                Shop
+                <span
+                    class="absolute -bottom-1 left-1/2 w-0 h-[1px] bg-shophia-plum transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
+            </a>
+            <a href="#about" class="hover:text-shophia-rose transition-colors relative group">
+                About
+                <span
+                    class="absolute -bottom-1 left-1/2 w-0 h-[1px] bg-shophia-plum transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
+            </a>
+            <a href="collection.html" class="hover:text-shophia-rose transition-colors relative group">
+                Collections
+                <span
+                    class="absolute -bottom-1 left-1/2 w-0 h-[1px] bg-shophia-plum transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
+            </a>
+            <a href="chatbot.html"
+                class="text-shophia-gold hover:text-white transition-colors relative group font-bold">
+                Our AI
+                <span
+                    class="absolute -bottom-1 left-1/2 w-0 h-[1px] bg-shophia-gold transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
+            </a>
+            <a href="login.html" onclick="logout(event)"
+                class="hover:text-shophia-rose transition-colors relative group">
+                Logout
+                <span
+                    class="absolute -bottom-1 left-1/2 w-0 h-[1px] bg-shophia-plum transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
+            </a>
+        </div>
+
+        <h1 class="logo-text text-4xl md:text-5xl font-serif italic tracking-tighter cursor-pointer"
+            onclick="window.scrollTo(0,0)">Shophia</h1>
+
+        <div class="flex gap-10 text-xs uppercase tracking-[0.2em] items-center">
+            <button id="search-btn" class="hover:text-shophia-silver transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </button>
+            <a href="wishlist.html" id="wishlist-btn"
+                class="hover:text-shophia-silver transition-colors flex items-center gap-2">
+                Wishlist (<span id="wish-count">0</span>)
+            </a>
+            <button id="cart-btn"
+                class="text-shophia-plum font-bold hover:text-white transition-colors flex items-center gap-2">
+                Cart (<span id="cart-count">0</span>)
+            </button>
+        </div>
+    </nav>
+
+    <!-- Search Overlay -->
+    <div id="search-overlay"
+        class="fixed inset-0 bg-shophia-bg/98 backdrop-blur-3xl z-[150] hidden flex-col overflow-y-auto">
+
+        <!-- Search Header -->
+        <div
+            class="sticky top-0 bg-shophia-bg/80 backdrop-blur-md z-30 pt-10 pb-6 px-6 md:px-10 border-b border-white/5">
+            <div class="max-w-7xl mx-auto relative">
+                <button id="close-search"
+                    class="absolute -top-4 right-0 text-shophia-silver hover:text-white transition-all">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+
+                <div class="relative group mt-8">
+                    <span
+                        class="absolute left-0 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-shophia-rose transition-colors">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </span>
+                    <input type="text" id="search-input" placeholder="Search for lipstick, foundation, skincare..."
+                        class="w-full bg-transparent border-b-2 border-white/5 pl-16 pr-12 py-8 text-4xl md:text-6xl font-serif text-white focus:outline-none focus:border-shophia-plum transition-all placeholder:text-white/5 uppercase italic">
+                    <button id="clear-search"
+                        class="absolute right-0 top-1/2 -translate-y-1/2 text-white/20 hover:text-white hidden">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="mt-8 flex flex-wrap items-center gap-6">
+                    <span class="text-[10px] text-white/30 uppercase tracking-widest">Popular:</span>
+                    <div class="flex flex-wrap gap-3">
+                        <button onclick="fillSearch('Lipstick')"
+                            class="px-4 py-1.5 rounded-full border border-white/10 text-[9px] uppercase tracking-widest hover:bg-shophia-plum hover:border-shophia-plum transition-all">Lipstick</button>
+                        <button onclick="fillSearch('Foundation')"
+                            class="px-4 py-1.5 rounded-full border border-white/10 text-[9px] uppercase tracking-widest hover:bg-shophia-plum hover:border-shophia-plum transition-all">Foundation</button>
+                        <button onclick="fillSearch('Concealer')"
+                            class="px-4 py-1.5 rounded-full border border-white/10 text-[9px] uppercase tracking-widest hover:bg-shophia-plum hover:border-shophia-plum transition-all">Concealer</button>
+                        <button onclick="fillSearch('Blush')"
+                            class="px-4 py-1.5 rounded-full border border-white/10 text-[9px] uppercase tracking-widest hover:bg-shophia-plum hover:border-shophia-plum transition-all">Blush</button>
+                        <button onclick="fillSearch('Sunscreen')"
+                            class="px-4 py-1.5 rounded-full border border-white/10 text-[9px] uppercase tracking-widest hover:bg-shophia-plum hover:border-shophia-plum transition-all">Sunscreen</button>
+                    </div>
+                </div>
+
+                <div id="recent-searches-container" class="mt-4 flex flex-wrap items-center gap-6 hidden">
+                    <span class="text-[10px] text-white/30 uppercase tracking-widest">Recent:</span>
+                    <div id="recent-searches-chips" class="flex flex-wrap gap-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Content Area -->
+        <div class="max-w-7xl mx-auto w-full px-6 md:px-10 py-12 flex flex-col md:flex-row gap-12">
+
+            <!-- Sidebar: Filters & Sorting -->
+            <aside class="w-full md:w-64 flex-shrink-0 space-y-12">
+                <div>
+                    <h4 class="text-[10px] uppercase tracking-[0.3em] text-shophia-rose mb-6">Sort By</h4>
+                    <select id="search-sort"
+                        class="w-full bg-transparent border-b border-white/10 py-2 text-xs uppercase tracking-widest focus:outline-none">
+                        <option value="trending" class="bg-shophia-bg">Trending</option>
+                        <option value="bestselling" class="bg-shophia-bg">Best Selling</option>
+                        <option value="price-low" class="bg-shophia-bg">Price: Low to High</option>
+                        <option value="price-high" class="bg-shophia-bg">Price: High to Low</option>
+                        <option value="newest" class="bg-shophia-bg">New Arrivals</option>
+                    </select>
+                </div>
+
+                <div class="space-y-10">
+                    <h4 class="text-[10px] uppercase tracking-[0.3em] text-shophia-rose mb-6">Filters</h4>
+
+                    <!-- Category Filter -->
+                    <div class="space-y-4">
+                        <p class="text-[9px] uppercase tracking-widest text-white/40">Category</p>
+                        <div class="flex flex-col gap-3">
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input type="checkbox" name="category" value="Lips" class="accent-shophia-rose">
+                                <span
+                                    class="text-[10px] uppercase tracking-widest group-hover:text-shophia-rose transition-colors">Lips</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input type="checkbox" name="category" value="Eyes" class="accent-shophia-rose">
+                                <span
+                                    class="text-[10px] uppercase tracking-widest group-hover:text-shophia-rose transition-colors">Eyes</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input type="checkbox" name="category" value="Face" class="accent-shophia-rose">
+                                <span
+                                    class="text-[10px] uppercase tracking-widest group-hover:text-shophia-rose transition-colors">Face</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input type="checkbox" name="category" value="Skincare" class="accent-shophia-rose">
+                                <span
+                                    class="text-[10px] uppercase tracking-widest group-hover:text-shophia-rose transition-colors">Skincare</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Price Filter -->
+                    <div class="space-y-4">
+                        <p class="text-[9px] uppercase tracking-widest text-white/40">Price Range</p>
+                        <div class="flex flex-col gap-3">
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input type="radio" name="price-range" value="all" checked class="accent-shophia-rose">
+                                <span
+                                    class="text-[10px] uppercase tracking-widest group-hover:text-shophia-rose transition-colors">All
+                                    Prices</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input type="radio" name="price-range" value="under-25" class="accent-shophia-rose">
+                                <span
+                                    class="text-[10px] uppercase tracking-widest group-hover:text-shophia-rose transition-colors">Under
+                                    $25</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input type="radio" name="price-range" value="25-50" class="accent-shophia-rose">
+                                <span
+                                    class="text-[10px] uppercase tracking-widest group-hover:text-shophia-rose transition-colors">$25
+                                    - $50</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input type="radio" name="price-range" value="over-50" class="accent-shophia-rose">
+                                <span
+                                    class="text-[10px] uppercase tracking-widest group-hover:text-shophia-rose transition-colors">Over
+                                    $50</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Availability -->
+                    <div>
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" id="filter-stock" class="accent-shophia-rose">
+                            <span
+                                class="text-[10px] uppercase tracking-widest group-hover:text-shophia-rose transition-colors">In
+                                Stock Only</span>
+                        </label>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Results Section -->
+            <div class="flex-grow">
+                <div id="search-results-info" class="flex justify-between items-center mb-8 hidden">
+                    <p class="text-[10px] uppercase tracking-widest text-white/30"><span
+                            id="search-results-count">0</span> RESULTS FOUND</p>
+                </div>
+
+                <!-- Product Grid -->
+                <div id="search-results" class="grid grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+                    <!-- Products will be injected here -->
+                </div>
+
+                <!-- Suggestions / Instant Results Overlay -->
+                <div id="search-suggestions" class="hidden space-y-8 animate-fade-in">
+                    <div>
+                        <h4 class="text-[10px] uppercase tracking-[0.3em] text-shophia-rose mb-6">Matching Products</h4>
+                        <div id="matching-products" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <div>
+                            <h4 class="text-[10px] uppercase tracking-[0.3em] text-shophia-rose mb-6">Suggestions</h4>
+                            <div id="matching-queries" class="flex flex-col gap-3"></div>
+                        </div>
+                        <div>
+                            <h4 class="text-[10px] uppercase tracking-[0.3em] text-shophia-rose mb-6">Related Brands
+                            </h4>
+                            <div id="matching-brands" class="flex flex-wrap gap-3"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- No Results Found -->
+                <div id="search-empty" class="hidden text-center py-20 flex-col items-center">
+                    <div class="w-32 h-32 mb-8 text-shophia-plum/40">
+                        <svg fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                            <path d="M12 7c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5S13.38 7 12 7z"
+                                opacity=".3" />
+                        </svg>
+                    </div>
+                    <h2 class="text-4xl font-serif italic mb-4">No beauty matches found 💕</h2>
+                    <p class="text-shophia-silver text-[10px] uppercase tracking-[0.2em] mb-12">Try another keyword or
+                        explore our best sellers.</p>
+                    <button onclick="fillSearch('Plum Velvet')"
+                        class="bg-shophia-plum px-10 py-4 text-[10px] uppercase tracking-widest font-bold hover:bg-white hover:text-shophia-bg transition-all">Shop
+                        Best Sellers</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommended Section (Always at the bottom) -->
+        <section class="max-w-7xl mx-auto w-full px-6 md:px-10 py-24 border-t border-white/5">
+            <h3 class="text-3xl font-serif italic mb-12 text-center">✨ You May Also Love</h3>
+            <div id="search-recommendations" class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <!-- Recommendations -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Wishlist Overlay -->
+    <div id="wishlist-overlay"
+        class="fixed inset-0 bg-shophia-bg/98 backdrop-blur-3xl z-[110] hidden flex-col p-10 overflow-y-auto">
+        <button id="close-wishlist"
+            class="absolute top-10 right-10 text-shophia-silver hover:text-white transition-all z-20">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+
+        <div class="w-full max-w-7xl mx-auto py-20">
+            <header class="text-center mb-16">
+                <h2 class="text-6xl font-serif italic mb-2">My Wishlist</h2>
+                <p class="text-shophia-rose tracking-[0.3em] uppercase text-[10px]">Save your favorite beauty picks for
+                    later ✨</p>
+            </header>
+
+            <div id="wishlist-overlay-actions"
+                class="flex justify-between items-center mb-10 border-b border-white/5 pb-6">
+                <div class="flex gap-6">
+                    <button onclick="addAllToCart()"
+                        class="text-[9px] uppercase tracking-widest hover:text-shophia-plum transition-colors">Add All
+                        to Cart</button>
+                    <button onclick="clearWishlist()"
+                        class="text-[9px] uppercase tracking-widest hover:text-shophia-plum transition-colors">Clear</button>
+                </div>
+                <p id="wishlist-overlay-count" class="text-[9px] text-white/30 uppercase tracking-widest">0 ITEMS</p>
+            </div>
+
+            <div id="wishlist-overlay-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Products -->
+            </div>
+
+            <div id="wishlist-overlay-empty" class="hidden text-center py-20">
+                <div class="w-20 h-20 mx-auto mb-6 text-shophia-plum/30">
+                    <svg fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M19.46,6.33L16.4,3.27a.48.48,0,0,0-.68,0L13,6h.46a2,2,0,0,1,2,2V16h4V8.33A2,2,0,0,0,19.46,6.33ZM15,18H9a1,1,0,0,0-1,1v4a1,1,0,0,0,1,1h6a1,1,0,0,0,1-1V19A1,1,0,0,0,15,18Z" />
+                    </svg>
+                </div>
+                <p class="font-serif italic text-2xl mb-4">Your beauty wishlist is waiting 💕</p>
+                <button onclick="document.getElementById('close-wishlist').click()"
+                    class="text-[9px] uppercase tracking-widest border-b border-white/20 hover:border-white transition-all">Discover
+                    products</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Drawer Overlay -->
+    <div id="cart-overlay"
+        class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] opacity-0 pointer-events-none transition-all duration-500">
+    </div>
+
+    <!-- Cart Drawer -->
+    <div id="cart-drawer"
+        class="fixed right-0 top-0 h-full w-full max-w-md bg-shophia-bg border-l border-white/10 z-[70] p-10 flex flex-col">
+        <div class="flex justify-between items-center mb-12">
+            <h2 class="font-serif text-3xl">Your Collection</h2>
+            <button id="close-cart"
+                class="text-shophia-silver hover:text-white uppercase tracking-widest text-xs">Close</button>
+        </div>
+
+        <div id="cart-items" class="flex-grow overflow-y-auto pr-4">
+            <!-- Items populated by JS -->
+            <p class="text-white/30 italic text-center mt-20">Your bag is currently empty.</p>
+        </div>
+
+        <div class="mt-auto pt-10 border-t border-white/10">
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-shophia-silver uppercase tracking-widest text-xs">Subtotal</span>
+                <span id="cart-total" class="font-serif text-2xl">$0.00</span>
+            </div>
+            <button onclick="window.location.href='checkout.html'"
+                class="w-full py-5 bg-shophia-plum text-white uppercase tracking-[0.3em] text-xs font-bold hover:bg-white hover:text-shophia-bg transition-all duration-500 transform hover:scale-[1.02]">
+                Checkout Now
+            </button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero-canvas-container" id="hero-trigger">
+        <div class="sticky-canvas-wrapper">
+            <canvas id="hero-canvas"></canvas>
+
+            <!-- Shophia Branding Overlay -->
+            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none px-6">
+                <div id="hero-text" class="text-center opacity-0 transition-all duration-1000">
+                    <h1 class="text-7xl md:text-9xl font-serif text-white mb-6 italic leading-tight">
+                        Sultry.<br>
+                        <span class="pl-20">Sophisticated.</span><br>
+                        <span class="pl-40">Shophia.</span>
+                    </h1>
+                    <p class="text-shophia-rose font-sans tracking-[0.8em] uppercase text-xs md:text-sm">Define Your
+                        Beauty</p>
+                </div>
+
+                <div id="hero-cta" class="absolute bottom-20 opacity-0 transition-opacity duration-1000">
+                    <button onclick="window.location.href='collection.html'"
+                        class="px-12 py-5 bg-shophia-plum text-white rounded-full font-semibold border border-[#C0C0C0]/30 hover:bg-shophia-rose hover:border-white transition-all duration-500 pointer-events-auto transform hover:scale-105 shadow-2xl active:scale-95 uppercase tracking-widest text-xs">
+                        Start Your Journey
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Category Scroll -->
+    <section class="py-32 bg-shophia-bg overflow-hidden relative group">
+        <div class="px-10 mb-16">
+            <h2 class="text-6xl font-serif mb-4">The Curations</h2>
+            <p class="text-shophia-silver tracking-widest uppercase text-xs">Explore byproduct categories</p>
+        </div>
+
+        <div class="relative px-10">
+            <!-- Scroll Controls Centered on Images -->
+            <button id="scroll-left"
+                class="absolute left-6 top-1/2 -translate-y-1/2 z-30 w-16 h-16 border border-white/10 rounded-full flex items-center justify-center bg-black/40 backdrop-blur-xl text-white hover:bg-white hover:text-black transition-all opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 shadow-2xl">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
+                    </path>
+                </svg>
+            </button>
+            <button id="scroll-right"
+                class="absolute right-6 top-1/2 -translate-y-1/2 z-30 w-16 h-16 border border-white/10 rounded-full flex items-center justify-center bg-black/40 backdrop-blur-xl text-white hover:bg-white hover:text-black transition-all opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 shadow-2xl">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+
+            <div class="flex gap-10 overflow-x-auto pb-20 no-scrollbar select-none scroll-smooth" id="category-scroll">
+                <!-- category 1 - Lip -->
+                <div class="category-card group/card cursor-pointer flex-shrink-0">
+                    <img src="WhatsApp Image 2026-02-14 at 1.40.10 AM.jpeg"
+                        class="w-full h-full object-cover transition-transform duration-1000 grayscale hover:grayscale-0">
+                    <div class="category-overlay absolute inset-0"></div>
+                    <div class="absolute bottom-10 left-10">
+                        <h3 class="text-4xl font-serif italic mb-2">Lip</h3>
+                        <p class="text-white/60 text-xs tracking-[0.3em] uppercase">Velvet & Silk</p>
+                    </div>
+                </div>
+                <!-- category 2 - Eyes -->
+                <div class="category-card group/card cursor-pointer flex-shrink-0">
+                    <img src="WhatsApp Image 2026-02-14 at 1.40.10 AM (2).jpeg"
+                        class="w-full h-full object-cover transition-transform duration-1000 grayscale hover:grayscale-0">
+                    <div class="category-overlay absolute inset-0"></div>
+                    <div class="absolute bottom-10 left-10">
+                        <h3 class="text-4xl font-serif italic mb-2">Eyes</h3>
+                        <p class="text-white/60 text-xs tracking-[0.3em] uppercase">Pigments & Shadow</p>
+                    </div>
+                </div>
+                <!-- category 3 - Face -->
+                <div class="category-card group/card cursor-pointer flex-shrink-0">
+                    <img src="WhatsApp Image 2026-02-14 at 1.40.11 AM.jpeg"
+                        class="w-full h-full object-cover transition-transform duration-1000 grayscale hover:grayscale-0">
+                    <div class="category-overlay absolute inset-0"></div>
+                    <div class="absolute bottom-10 left-10">
+                        <h3 class="text-4xl font-serif italic mb-2">Face</h3>
+                        <p class="text-white/60 text-xs tracking-[0.3em] uppercase">Radiance & Glow</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content: The Gallery -->
+    <main class="bg-shophia-bg relative z-10 pt-20">
+        <!-- The Essentials section has been moved to collection.html -->
+
+        <!-- Makers Section (The Craft) -->
+        <section class="makers-section bg-shophia-bg border-t border-white/5" id="about">
+            <div class="makers-sticky">
+                <img src="WhatsApp Image 2026-02-14 at 2.03.24 AM.jpeg"
+                    class="w-full h-full object-cover brightness-50">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <h2 class="text-8xl md:text-9xl font-serif italic text-white/10 select-none">Makers</h2>
+                </div>
+            </div>
+
+            <div class="py-40 px-10 md:px-24 space-y-40">
+                <div class="max-w-md">
+                    <span class="text-shophia-plum uppercase tracking-[0.5em] text-xs font-bold mb-6 block">The
+                        Sourcing</span>
+                    <h3 class="text-5xl font-serif mb-8 leading-tight">Ethical Minerals, Untarnished Soul.</h3>
+                    <p class="text-shophia-silver leading-relaxed font-light">
+                        Every pigment in our collection is sourced from ethical mines that respect both the earth
+                        and
+                        its workers. We believe true beauty cannot come at the expense of others.
+                    </p>
+                    <div class="h-[1px] w-40 bg-shophia-silver/30 mt-12"></div>
+                </div>
+
+                <div class="max-w-md">
+                    <span class="text-shophia-plum uppercase tracking-[0.5em] text-xs font-bold mb-6 block">The
+                        Formulation</span>
+                    <h3 class="text-5xl font-serif mb-8 leading-tight">Science Meets Sultry.</h3>
+                    <p class="text-shophia-silver leading-relaxed font-light">
+                        Our laboratories in Switzerland develop textures that feel like a second skin. Lab-tested
+                        for
+                        24-hour endurance, ensuring your radiance never fades before you do.
+                    </p>
+                    <div class="h-[1px] w-40 bg-shophia-rose/30 mt-12"></div>
+                </div>
+
+                <div class="max-w-md">
+                    <span
+                        class="text-shophia-plum uppercase tracking-[0.5em] text-xs font-bold mb-6 block">Sustainability</span>
+                    <h3 class="text-5xl font-serif mb-8 leading-tight">Recyclable Silver.</h3>
+                    <p class="text-shophia-silver leading-relaxed font-light">
+                        Our signature Metallic Silver packaging isn't just for show—it's crafted from 100%
+                        recyclable
+                        aluminum, designed to be repurposed for eternity.
+                    </p>
+                </div>
+
+                <div class="pt-20">
+                    <a href="#"
+                        class="inline-flex items-center gap-4 text-white group uppercase tracking-widest text-xs font-bold">
+                        Read Our Full Story
+                        <span class="w-12 h-[1px] bg-white group-hover:w-20 transition-all duration-500"></span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="py-32 bg-[#252525] border-t border-[#C0C0C0]/10 text-center relative overflow-hidden">
+            <div
+                class="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-[1px] bg-gradient-to-r from-transparent via-[#C0C0C0]/20 to-transparent">
+            </div>
+
+            <div class="mb-12">
+                <span
+                    class="font-serif text-7xl md:text-9xl italic text-[#4A0E2E] tracking-tighter opacity-80 inline-block hover:scale-105 transition-transform duration-700 cursor-default">Shophia</span>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-12 mb-20 px-6">
+                <a href="#"
+                    class="text-shophia-silver hover:text-white transition-colors uppercase tracking-[0.3em] text-[10px]">Privacy
+                    Policy</a>
+                <a href="#"
+                    class="text-shophia-silver hover:text-white transition-colors uppercase tracking-[0.3em] text-[10px]">Shipping
+                    & Returns</a>
+                <a href="#"
+                    class="text-shophia-silver hover:text-white transition-colors uppercase tracking-[0.3em] text-[10px]">Sustainability</a>
+                <a href="#"
+                    class="text-shophia-silver hover:text-white transition-colors uppercase tracking-[0.3em] text-[10px]">Contact
+                    Us</a>
+            </div>
+
+            <div class="flex justify-center gap-8 mb-16">
+                <div
+                    class="w-10 h-10 border border-white/10 flex items-center justify-center rounded-full hover:border-shophia-plum transition-all cursor-pointer">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                    </svg>
+                </div>
+                <div
+                    class="w-10 h-10 border border-white/10 flex items-center justify-center rounded-full hover:border-shophia-plum transition-all cursor-pointer">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
+                    </svg>
+                </div>
+            </div>
+
+            <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+                class="mt-16 flex flex-col items-center gap-3 group mx-auto mb-16">
+                <div
+                    class="w-14 h-14 border border-white/10 rounded-full flex items-center justify-center group-hover:bg-shophia-plum group-hover:border-shophia-plum transition-all duration-700 shadow-xl">
+                    <svg class="w-6 h-6 group-hover:-translate-y-1 transition-transform duration-500" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5 10l7-7m0 0l7 7m-7-7v18">
+                        </path>
+                    </svg>
+                </div>
+                <span
+                    class="text-[10px] uppercase tracking-[0.4em] text-white/30 group-hover:text-white transition-colors duration-500">Back
+                    to top</span>
+            </button>
+
+            <p class="text-[#C0C0C0]/30 text-[10px] tracking-[0.5em] uppercase px-6">&copy; 2026 Shophia Luxury.
+                Crafted
+                with soul.</p>
+        </footer>
+    </main>
+
+    <!-- Feedback Toast -->
+    <div id="feedback-toast"
+        class="fixed bottom-10 right-10 bg-shophia-plum border border-[#C0C0C0]/20 p-6 text-white z-[100] shadow-2xl">
+        <p class="font-serif italic text-xl mb-1">Added to your collection.</p>
+        <p class="text-white/40 text-[10px] uppercase tracking-widest">Discover your beauty.</p>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Redirect unauthorized users
+        if (!localStorage.getItem('shophia_logged_in')) {
+            window.location.href = 'login.html';
+        }
+
+        function logout(e) {
+            e.preventDefault();
+            localStorage.removeItem('shophia_logged_in');
+            window.location.href = "login.html";
+        }
+
+        // Cart State Management
+        let cart = JSON.parse(localStorage.getItem('shophia_cart')) || [];
+        let wishlist = JSON.parse(localStorage.getItem('shophia_wishlist')) || [];
+
+        // UI Selectors
+        const nav = document.querySelector('nav');
+        const cartDrawer = document.getElementById('cart-drawer');
+        const cartOverlay = document.getElementById('cart-overlay');
+        const cartCount = document.getElementById('cart-count');
+        const cartItems = document.getElementById('cart-items');
+        const cartTotal = document.getElementById('cart-total');
+        const feedbackToast = document.getElementById('feedback-toast');
+        const searchOverlay = document.getElementById('search-overlay');
+        const searchInput = document.getElementById('search-input');
+        const wishCountDisplay = document.getElementById('wish-count');
+        const wishlistOverlay = document.getElementById('wishlist-overlay');
+        const wishlistGrid = document.getElementById('wishlist-overlay-grid');
+        const wishlistEmpty = document.getElementById('wishlist-overlay-empty');
+
+        // Initial Load Sync
+        function initStore() {
+            updateCart();
+            updateWishCount();
+            renderWishlistOverlay();
+        }
+
+        function updateWishCount() {
+            wishCountDisplay.innerText = wishlist.length;
+            highlightWishlistedItems();
+            renderWishlistOverlay();
+        }
+
+        function renderWishlistOverlay() {
+            if (!wishlistGrid) return;
+
+            if (wishlist.length === 0) {
+                wishlistGrid.classList.add('hidden');
+                document.getElementById('wishlist-overlay-actions').classList.add('hidden');
+                wishlistEmpty.classList.remove('hidden');
+                return;
+            }
+
+            wishlistGrid.classList.remove('hidden');
+            document.getElementById('wishlist-overlay-actions').classList.remove('hidden');
+            wishlistEmpty.classList.add('hidden');
+
+            wishlistGrid.innerHTML = wishlist.map((item, idx) => `
+                <div class="bg-white/5 p-4 relative group">
+                    <button onclick="removeFromWishlist(${idx})" class="absolute top-2 right-2 z-10 text-white/20 hover:text-shophia-rose transition-all">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                    </button>
+                    <div class="aspect-[3/4] overflow-hidden mb-4">
+                        <img src="${item.img}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex justify-between items-start mb-4">
+                        <h4 class="font-serif italic text-sm">${item.name}</h4>
+                        <span class="text-[10px] text-shophia-rose">$${item.price.toFixed(2)}</span>
+                    </div>
+                    <button onclick="moveToCart(${idx})" class="w-full py-3 bg-shophia-plum text-white uppercase text-[8px] tracking-widest font-bold hover:bg-white hover:text-shophia-bg transition-all">Move to Cart</button>
+                </div>
+            `).join('');
+
+            document.getElementById('wishlist-overlay-count').innerText = `${wishlist.length} ITEMS`;
+        }
+
+        window.removeFromWishlist = (idx) => {
+            wishlist.splice(idx, 1);
+            localStorage.setItem('shophia_wishlist', JSON.stringify(wishlist));
+            updateWishCount();
+            showFeedback('Removed from wishlist.');
+        };
+
+        window.moveToCart = (idx) => {
+            const item = wishlist[idx];
+            cart.push({ name: item.name, price: item.price });
+            wishlist.splice(idx, 1);
+            localStorage.setItem('shophia_cart', JSON.stringify(cart));
+            localStorage.setItem('shophia_wishlist', JSON.stringify(wishlist));
+            updateCart();
+            updateWishCount();
+            showFeedback(`Moved ${item.name} to your bag.`);
+        };
+
+        window.addAllToCart = () => {
+            wishlist.forEach(item => cart.push({ name: item.name, price: item.price }));
+            wishlist = [];
+            localStorage.setItem('shophia_cart', JSON.stringify(cart));
+            localStorage.setItem('shophia_wishlist', JSON.stringify(wishlist));
+            updateCart();
+            updateWishCount();
+            showFeedback('All items moved to your bag.');
+        };
+
+        window.clearWishlist = () => {
+            wishlist = [];
+            localStorage.setItem('shophia_wishlist', JSON.stringify(wishlist));
+            updateWishCount();
+            showFeedback('Wishlist cleared.');
+        };
+
+        function highlightWishlistedItems() {
+            const products = document.querySelectorAll('.product-group');
+            products.forEach(p => {
+                const nameEl = p.querySelector('h3');
+                const heart = p.querySelector('button[onclick*="addToWishlist"]');
+                if (nameEl && heart) {
+                    const name = nameEl.innerText;
+                    if (wishlist.find(i => i.name === name)) {
+                        heart.classList.add('text-shophia-rose');
+                        heart.classList.remove('text-white/40');
+                    } else {
+                        heart.classList.remove('text-shophia-rose');
+                        heart.classList.add('text-white/40');
+                    }
+                }
+            });
+        }
+
+        // Products Inventory
+        const inventory = [
+            { id: 1, name: 'Plum Velvet Lipstick', price: 32, category: 'Lips', brand: 'Shophia', img: 'WhatsApp Image 2026-02-14 at 1.40.10 AM.jpeg', stock: true, rating: 4.8, trending: true, bestselling: true, newest: false },
+            { id: 2, name: 'Silver Glow Highlighter', price: 38, category: 'Face', brand: 'Shophia', img: 'WhatsApp Image 2026-02-14 at 1.40.11 AM.jpeg', stock: true, rating: 4.9, trending: true, bestselling: false, newest: true },
+            { id: 3, name: 'Lip Balm', price: 18, category: 'Lips', brand: 'Shophia', img: 'Lip balm.jpeg', stock: true, rating: 4.5, trending: false, bestselling: true, newest: false },
+            { id: 4, name: 'Mascara', price: 28, category: 'Eyes', brand: 'Shophia', img: 'mascara.jpeg', stock: true, rating: 4.7, trending: true, bestselling: true, newest: false },
+            { id: 5, name: 'Blush', price: 34, category: 'Face', brand: 'Shophia', img: 'blush.jpeg', stock: true, rating: 4.6, trending: false, bestselling: true, newest: false },
+            { id: 6, name: 'Contour', price: 36, category: 'Face', brand: 'Shophia', img: 'contour.jpeg', stock: true, rating: 4.8, trending: true, bestselling: false, newest: false },
+            { id: 7, name: 'Lip Liner', price: 22, category: 'Lips', brand: 'Shophia', img: 'lip liner.jpeg', stock: true, rating: 4.4, trending: false, bestselling: false, newest: true },
+            { id: 8, name: 'Lip Tint', price: 26, category: 'Lips', brand: 'Shophia', img: 'lip tint.jpeg', stock: false, rating: 4.3, trending: true, bestselling: false, newest: false },
+            { id: 9, name: 'False Eyelashes', price: 24, category: 'Eyes', brand: 'Shophia', img: 'False Eyelashes.jpeg', stock: true, rating: 4.6, trending: false, bestselling: false, newest: true },
+            { id: 10, name: 'Beauty Blender', price: 20, category: 'Tools', brand: 'Shophia', img: 'beauty blender.jpeg', stock: true, rating: 4.9, trending: true, bestselling: true, newest: false },
+            { id: 11, name: 'Setting Spray', price: 30, category: 'Face', brand: 'Shophia', img: 'setting spray.jpeg', stock: true, rating: 4.7, trending: false, bestselling: false, newest: true },
+            { id: 12, name: 'Makeup Remover', price: 25, category: 'Skincare', brand: 'Shophia', img: 'makeup remover.jpeg', stock: true, rating: 4.5, trending: false, bestselling: false, newest: false },
+            { id: 13, name: 'Moisturizer', price: 45, category: 'Skincare', brand: 'Shophia', img: 'Moisturizer.jpeg', stock: true, rating: 4.9, trending: true, bestselling: false, newest: true },
+            { id: 14, name: 'Sunblock', price: 35, category: 'Skincare', brand: 'Shophia', img: 'sunblock.jpeg', stock: true, rating: 4.8, trending: false, bestselling: true, newest: true },
+        ];
+
+        // Search Logic
+        // searchInput is already declared globally above
+        const searchResultsInfo = document.getElementById('search-results-info');
+        const searchResultsCount = document.getElementById('search-results-count');
+        const searchResultsGrid = document.getElementById('search-results');
+        const searchSuggestions = document.getElementById('search-suggestions');
+        const searchEmpty = document.getElementById('search-empty');
+        const clearSearchBtn = document.getElementById('clear-search');
+        const recentSearchesContainer = document.getElementById('recent-searches-container');
+        const recentSearchesChips = document.getElementById('recent-searches-chips');
+        const searchRecommendations = document.getElementById('search-recommendations');
+
+        let recentSearches = JSON.parse(localStorage.getItem('shophia_recent_searches')) || [];
+
+        function updateRecentSearches(query) {
+            if (!query || query.length < 2) return;
+            recentSearches = [query, ...recentSearches.filter(s => s !== query)].slice(0, 5);
+            localStorage.setItem('shophia_recent_searches', JSON.stringify(recentSearches));
+            renderRecentSearches();
+        }
+
+        function renderRecentSearches() {
+            if (recentSearches.length === 0) {
+                recentSearchesContainer.classList.add('hidden');
+                return;
+            }
+            recentSearchesContainer.classList.remove('hidden');
+            recentSearchesChips.innerHTML = recentSearches.map(s => `
+                <button onclick="fillSearch('${s}')" class="text-[9px] text-white/60 hover:text-white transition-colors border-b border-white/10 italic">#${s}</button>
+            `).join('');
+        }
+
+        function createProductCard(product) {
+            const isWishlisted = wishlist.some(item => item.name === product.name);
+            return `
+                <div class="product-group group relative animate-fade-in">
+                    <div class="bg-[#1A1A1A] border border-white/5 p-4 rounded-sm shadow-2xl overflow-hidden">
+                        <div class="relative aspect-[3/4] overflow-hidden bg-[#252525] mb-6">
+                            <img src="${product.img}" class="object-cover w-full h-full group-hover:scale-110 transition-transform duration-1000">
+                            <button onclick="addToWishlist('${product.name}', ${product.price}, '${product.img}', this)"
+                                class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center ${isWishlisted ? 'text-shophia-rose' : 'text-white/40'} hover:text-shophia-rose transition-all hover:scale-110">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                </svg>
+                            </button>
+                            ${!product.stock ? '<div class="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center"><p class="text-[10px] uppercase tracking-[0.3em] font-bold text-white">Sold Out</p></div>' : ''}
+                            <div class="absolute inset-x-0 bottom-0 quick-add pointer-events-none group-hover:pointer-events-auto">
+                                <button onclick="addToCart('${product.name}', ${product.price})"
+                                    class="w-full py-4 bg-shophia-plum text-white uppercase tracking-widest text-xs font-bold hover:bg-white hover:text-shophia-bg transition-all duration-300 ${!product.stock ? 'opacity-50 cursor-not-allowed' : ''}" ${!product.stock ? 'disabled' : ''}>
+                                    Quick Add +
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-serif text-lg">${product.name}</h3>
+                            <span class="text-shophia-silver">$${product.price.toFixed(2)}</span>
+                        </div>
+                        <div class="flex items-center gap-2 mb-4">
+                             <div class="flex text-shophia-rose scale-75 origin-left">
+                                ${Array(5).fill(0).map((_, i) => `<svg class="w-2 h-2" fill="${i < Math.floor(product.rating) ? 'currentColor' : 'white/20'}" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`).join('')}
+                            </div>
+                            <span class="text-[8px] text-white/30 tracking-widest">(${product.rating})</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderRecommendations() {
+            const items = inventory.filter(p => p.trending).slice(0, 4);
+            searchRecommendations.innerHTML = items.map(p => `
+                <div class="text-center group cursor-pointer" onclick="fillSearch('${p.name}')">
+                    <div class="aspect-[3/4] bg-white/5 mb-4 overflow-hidden">
+                        <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform">
+                    </div>
+                    <p class="font-serif text-[10px] italic">${p.name}</p>
+                </div>
+            `).join('');
+        }
+
+        function performSearch() {
+            const query = searchInput.value.toLowerCase().trim();
+            if (query.length < 2) {
+                searchResultsInfo.classList.add('hidden');
+                searchResultsGrid.innerHTML = '';
+                searchSuggestions.classList.add('hidden');
+                searchEmpty.classList.add('hidden');
+                return;
+            }
+
+            updateRecentSearches(query);
+
+            const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(cb => cb.value);
+            const priceRange = document.querySelector('input[name="price-range"]:checked').value;
+            const onlyInStock = document.getElementById('filter-stock').checked;
+            const sortBy = document.getElementById('search-sort').value;
+
+            let filtered = inventory.filter(p => {
+                const matchesQuery = p.name.toLowerCase().includes(query) || p.category.toLowerCase().includes(query);
+                const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(p.category);
+                const matchesStock = !onlyInStock || p.stock;
+
+                let matchesPrice = true;
+                if (priceRange === 'under-25') matchesPrice = p.price < 25;
+                if (priceRange === '25-50') matchesPrice = p.price >= 25 && p.price <= 50;
+                if (priceRange === 'over-50') matchesPrice = p.price > 50;
+
+                return matchesQuery && matchesCategory && matchesPrice && matchesStock;
+            });
+
+            // Sorting
+            if (sortBy === 'price-low') filtered.sort((a, b) => a.price - b.price);
+            if (sortBy === 'price-high') filtered.sort((a, b) => b.price - a.price);
+            if (sortBy === 'bestselling') filtered.sort((a, b) => (b.bestselling ? 1 : 0) - (a.bestselling ? 1 : 0));
+            if (sortBy === 'trending') filtered.sort((a, b) => (b.trending ? 1 : 0) - (a.trending ? 1 : 0));
+            if (sortBy === 'newest') filtered.sort((a, b) => (b.newest ? 1 : 0) - (a.newest ? 1 : 0));
+
+            searchSuggestions.classList.add('hidden');
+
+            if (filtered.length === 0) {
+                searchResultsGrid.innerHTML = '';
+                searchResultsInfo.classList.add('hidden');
+                searchEmpty.classList.remove('hidden');
+                searchEmpty.classList.add('flex');
+            } else {
+                searchEmpty.classList.add('hidden');
+                searchEmpty.classList.remove('flex');
+                searchResultsInfo.classList.remove('hidden');
+                searchResultsCount.innerText = filtered.length;
+                searchResultsGrid.innerHTML = filtered.map(p => createProductCard(p)).join('');
+            }
+        }
+
+        function showSuggestions() {
+            const query = searchInput.value.toLowerCase().trim();
+            if (query.length < 2) {
+                searchSuggestions.classList.add('hidden');
+                return;
+            }
+
+            const matchingProducts = inventory.filter(p => p.name.toLowerCase().includes(query)).slice(0, 4);
+            const matchingCategories = [...new Set(inventory.filter(p => p.category.toLowerCase().includes(query)).map(p => p.category))];
+            const matchingBrands = [...new Set(inventory.filter(p => p.brand.toLowerCase().includes(query)).map(p => p.brand))];
+
+            if (matchingProducts.length === 0 && matchingCategories.length === 0 && matchingBrands.length === 0) {
+                searchSuggestions.classList.add('hidden');
+                return;
+            }
+
+            searchResultsGrid.innerHTML = '';
+            searchResultsInfo.classList.add('hidden');
+            searchEmpty.classList.add('hidden');
+            searchSuggestions.classList.remove('hidden');
+
+            document.getElementById('matching-products').innerHTML = matchingProducts.map(p => `
+                <div class="flex gap-4 p-3 bg-white/5 hover:bg-white/10 transition-colors cursor-pointer group" onclick="fillSearch('${p.name}')">
+                    <img src="${p.img}" class="w-12 h-16 object-cover">
+                    <div class="flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest group-hover:text-shophia-rose transition-colors">${p.name}</p>
+                        <p class="text-[8px] text-white/40 tracking-widest">${p.category}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('matching-queries').innerHTML = matchingCategories.map(c => `
+                <button onclick="fillSearch('${c}')" class="text-left text-[11px] uppercase tracking-widest py-2 hover:text-shophia-rose transition-colors border-b border-white/5">Search in ${c}</button>
+            `).join('') + `
+                <button onclick="fillSearch('${query}')" class="text-left text-[11px] uppercase tracking-widest py-2 hover:text-shophia-rose transition-colors border-b border-white/5">See results for "${query}"</button>
+            `;
+
+            document.getElementById('matching-brands').innerHTML = matchingBrands.map(b => `
+                <button onclick="fillSearch('${b}')" class="px-4 py-2 border border-white/10 text-[9px] uppercase tracking-widest hover:border-shophia-plum transition-all">${b}</button>
+            `).join('');
+        }
+
+        window.fillSearch = (query) => {
+            searchInput.value = query;
+            clearSearchBtn.classList.remove('hidden');
+            performSearch();
+        };
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value;
+            if (query.length > 0) {
+                clearSearchBtn.classList.remove('hidden');
+                showSuggestions();
+            } else {
+                clearSearchBtn.classList.add('hidden');
+                searchSuggestions.classList.add('hidden');
+                searchResultsGrid.innerHTML = '';
+            }
+        });
+
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            clearSearchBtn.classList.add('hidden');
+            searchSuggestions.classList.add('hidden');
+            searchResultsGrid.innerHTML = '';
+            searchResultsInfo.classList.add('hidden');
+            searchEmpty.classList.add('hidden');
+            searchInput.focus();
+        });
+
+        // Search Overlay Listeners
+        document.getElementById('search-btn').addEventListener('click', () => {
+            searchOverlay.classList.remove('hidden');
+            searchOverlay.classList.add('flex');
+            renderRecentSearches();
+            renderRecommendations();
+            setTimeout(() => searchInput.focus(), 100);
+            document.body.style.overflow = 'hidden';
+        });
+
+        document.getElementById('close-search').addEventListener('click', () => {
+            searchOverlay.classList.add('hidden');
+            searchOverlay.classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Wishlist Overlay Listeners
+        document.getElementById('wishlist-btn').addEventListener('click', () => {
+            wishlistOverlay.classList.remove('hidden');
+            wishlistOverlay.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+            renderWishlistOverlay();
+        });
+
+        document.getElementById('close-wishlist').addEventListener('click', () => {
+            wishlistOverlay.classList.add('hidden');
+            wishlistOverlay.classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Filter/Sort Listeners
+        document.querySelectorAll('input[name="category"], input[name="price-range"], #filter-stock, #search-sort').forEach(el => {
+            el.addEventListener('change', () => {
+                if (searchInput.value.length >= 2) performSearch();
+            });
+        });
+
+        // Wishlist Logic Update to sync with Search results
+        const originalAddToWishlist = window.addToWishlist;
+        window.addToWishlist = (name, price, img, btn) => {
+            originalAddToWishlist(name, price, img, btn);
+            // If we are in the search overlay, results might need to re-reflect the state sometimes, 
+            // but the highlight logic already handles most of it.
+        };
+
+        // Wishlist Logic
+        window.addToWishlist = (name, price, img, btn) => {
+            btn = btn || (window.event ? window.event.currentTarget : null);
+            if (!wishlist.find(i => i.name === name)) {
+                wishlist.push({ name, price, img, inStock: true });
+                localStorage.setItem('shophia_wishlist', JSON.stringify(wishlist));
+                updateWishCount();
+                showFeedback(`Added ${name} to your wishlist.`);
+
+                if (btn) {
+                    btn.classList.add('text-shophia-rose');
+                    btn.classList.remove('text-white/40');
+                }
+            } else {
+                showFeedback(`${name} is already in your wishlist.`);
+            }
+        };
+
+        const showFeedback = (msg) => {
+            if (msg) feedbackToast.querySelector('p').innerText = msg;
+            feedbackToast.classList.add('show');
+            setTimeout(() => {
+                feedbackToast.classList.remove('show');
+                // Reset text after hide
+                setTimeout(() => feedbackToast.querySelector('p').innerText = 'Added to your collection.', 500);
+            }, 3000);
+        };
+
+        // Nav Shrink on Scroll
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('nav-scrolled');
+            } else {
+                nav.classList.remove('nav-scrolled');
+            }
+        });
+
+        // Cart Drawer Logic
+        document.getElementById('cart-btn').addEventListener('click', () => {
+            cartDrawer.classList.add('open');
+            cartOverlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        });
+
+        const closeCart = () => {
+            cartDrawer.classList.remove('open');
+            cartOverlay.classList.remove('open');
+            document.body.style.overflow = 'auto';
+        };
+
+        document.getElementById('close-cart').addEventListener('click', closeCart);
+        cartOverlay.addEventListener('click', closeCart);
+
+        // Category Gallery Scroll Controls
+        const categoryScroll = document.getElementById('category-scroll');
+        document.getElementById('scroll-left').addEventListener('click', () => {
+            categoryScroll.scrollLeft -= 500;
+        });
+        document.getElementById('scroll-right').addEventListener('click', () => {
+            categoryScroll.scrollLeft += 500;
+        });
+
+        // Add to Cart Logic
+        window.addToCart = (name, price) => {
+            cart.push({ name, price });
+            localStorage.setItem('shophia_cart', JSON.stringify(cart));
+            updateCart();
+            showFeedback();
+        };
+
+        const updateCart = () => {
+            cartCount.innerText = cart.length;
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="text-center py-20">
+                        <p class="text-white/30 italic mb-8">Your bag is currently empty.</p>
+                        <a href="collection.html" onclick="closeCart()" class="inline-block text-[10px] uppercase tracking-widest border-b border-white/20 hover:border-white transition-all">Continue Shopping</a>
+                    </div>
+                `;
+            } else {
+                cartItems.innerHTML = cart.map((item, idx) => `
+                    <div class="flex justify-between items-center mb-8 pb-4 border-b border-white/5">
+                        <div>
+                            <p class="font-serif text-lg">${item.name}</p>
+                            <p class="text-xs text-shophia-rose">$${item.price.toFixed(2)}</p>
+                        </div>
+                        <button onclick="removeFromCart(${idx})" class="text-[10px] text-white/30 hover:text-white transition-colors">REMOVE</button>
+                    </div>
+                `).join('');
+            }
+            const total = cart.reduce((acc, item) => acc + item.price, 0);
+            cartTotal.innerText = `$${total.toFixed(2)}`;
+        };
+
+        window.removeFromCart = (idx) => {
+            cart.splice(idx, 1);
+            localStorage.setItem('shophia_cart', JSON.stringify(cart));
+            updateCart();
+        };
+
+        initStore();
+
+        // Scroll to Top Button Visibility
+        const scrollTopBtn = document.getElementById('scroll-top-btn');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                scrollTopBtn.classList.add('show');
+            } else {
+                scrollTopBtn.classList.remove('show');
+            }
+        });
+
+        // Scroll Reveal Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active-fade');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
+
+        // Hero Canvas Logic (Existing Optimized)
+        const canvas = document.getElementById('hero-canvas');
+        const context = canvas.getContext('2d');
+        const heroTrigger = document.getElementById('hero-trigger');
+        const heroText = document.getElementById('hero-text');
+        const heroCta = document.getElementById('hero-cta');
+        const frameCount = 40;
+        const currentFrame = index => `ezgif-frame-${index.toString().padStart(3, '0')}.png`;
+        const images = [];
+        let isLoaded = false;
+        let loadedCount = 0;
+        let lastFrameIdx = -1;
+        const state = { targetFrame: 0, currentFrame: 0 };
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            if (isLoaded) render(state.currentFrame, true);
+        }
+
+        for (let i = 1; i <= frameCount; i++) {
+            const img = new Image();
+            img.onload = () => {
+                loadedCount++;
+                if (loadedCount === frameCount) {
+                    isLoaded = true;
+                    resizeCanvas();
+                    requestAnimationFrame(animate);
+                }
+            };
+            img.src = currentFrame(i);
+            images.push(img);
+        }
+
+        function render(frame, force = false) {
+            const frameIdx = Math.floor(Math.max(0, Math.min(frameCount - 1, frame)));
+            if (!force && frameIdx === lastFrameIdx) return;
+            const img = images[frameIdx];
+            if (!img) return;
+            lastFrameIdx = frameIdx;
+            const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
+            const x = (canvas.width / 2) - (img.width / 2) * scale;
+            const y = (canvas.height / 2) - (img.height / 2) * scale;
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.drawImage(img, x, y, img.width * scale, img.height * scale);
+        }
+
+        function animate() {
+            const lerpFactor = 0.2;
+            const delta = state.targetFrame - state.currentFrame;
+            if (Math.abs(delta) > 0.001) {
+                state.currentFrame += delta * lerpFactor;
+                render(state.currentFrame);
+            }
+            const maxScroll = heroTrigger.offsetHeight - window.innerHeight;
+            const scrollFraction = Math.max(0, Math.min(1, window.pageYOffset / maxScroll));
+
+            if (scrollFraction > 0.1 && scrollFraction < 0.6) {
+                heroText.style.opacity = Math.min(1, (scrollFraction - 0.1) * 3);
+                heroText.style.transform = `translateY(${(-scrollFraction + 0.1) * 100}px)`;
+            } else if (scrollFraction >= 0.6) {
+                heroText.style.opacity = Math.max(0, 1 - (scrollFraction - 0.6) * 4);
+            } else {
+                heroText.style.opacity = 0;
+            }
+
+            if (scrollFraction > 0.8) {
+                heroCta.style.opacity = Math.min(1, (scrollFraction - 0.8) / 0.15);
+                heroCta.style.pointerEvents = 'auto';
+            } else {
+                heroCta.style.opacity = 0;
+                heroCta.style.pointerEvents = 'none';
+            }
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const maxScroll = heroTrigger.offsetHeight - window.innerHeight;
+            const scrollFraction = Math.max(0, Math.min(1, scrollTop / maxScroll));
+            state.targetFrame = scrollFraction * (frameCount - 1);
+        }, { passive: true });
+
+        window.addEventListener('resize', resizeCanvas);
+    </script>
+    <button id="scroll-top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Scroll to top"
+        class="group">
+        <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+        </svg>
+        <span class="text-[8px] uppercase tracking-[0.2em] font-bold">Top</span>
+    </button>
+</body>
+
+</html>

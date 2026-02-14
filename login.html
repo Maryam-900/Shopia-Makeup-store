@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Shophia Luxury AI</title>
+    <meta name="description" content="Secure login for your Shophia Luxury AI experience.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        shophia: {
+                            bg: '#050505',
+                            plum: '#4A0E2E',
+                            rose: '#8E5B6E',
+                            gold: '#D4AF37',
+                            silver: '#C0C0C0',
+                            white: '#FFFFFF',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/css">
+        @layer base {
+            body {
+                background: linear-gradient(rgba(5, 5, 5, 0.7), rgba(5, 5, 5, 0.7)), url('background.jpeg');
+                background-size: cover;
+                background-position: center;
+                background-attachment: fixed;
+                color: white;
+                font-family: 'Inter', sans-serif;
+                overflow: hidden;
+                height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        /* 3D Perspective Wrapper */
+        .scene {
+            perspective: 1500px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .login-card {
+            width: 550px;
+            padding: 80px 60px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 40px;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 10;
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            background: linear-gradient(135deg, rgba(142, 91, 110, 0.3), transparent, rgba(212, 175, 55, 0.2));
+            border-radius: 40px;
+            z-index: -1;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        /* Floating elements in the card */
+        .card-content {
+            transform: translateZ(50px);
+        }
+
+        /* Input styling */
+        .input-group {
+            position: relative;
+            margin-bottom: 30px;
+            transform: translateZ(30px);
+        }
+
+        .input-group input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 16px 20px;
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #8E5B6E;
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 20px rgba(142, 91, 110, 0.2);
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: rgba(255, 255, 255, 0.3);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus+label,
+        .input-group input:not(:placeholder-shown)+label {
+            top: -10px;
+            left: 10px;
+            font-size: 10px;
+            color: #D4AF37;
+            background: #050505;
+            padding: 0 10px;
+        }
+
+        /* Button styling */
+        .login-btn {
+            width: 100%;
+            padding: 18px;
+            background: #FFFFFF;
+            color: #000;
+            border-radius: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateZ(40px);
+            margin-top: 20px;
+        }
+
+        .login-btn:hover {
+            background: #8E5B6E;
+            color: white;
+            transform: translateZ(60px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(142, 91, 110, 0.3);
+        }
+
+        /* Background Magic */
+        .magic-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.15;
+            animation: orb-float 20s infinite linear;
+        }
+
+        @keyframes orb-float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            33% {
+                transform: translate(100px, 100px) rotate(120deg);
+            }
+
+            66% {
+                transform: translate(-50px, 150px) rotate(240deg);
+            }
+
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        .grid-overlay {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 2;
+            pointer-events: none;
+            perspective: 1000px;
+            transform: rotateX(60deg) translateY(-200px);
+            height: 200%;
+        }
+
+        /* Floating Image Elements */
+        .beauty-float {
+            position: fixed;
+            z-index: 3;
+            pointer-events: none;
+            opacity: 0.15;
+            filter: grayscale(0.5) contrast(1.2);
+            animation: float-parallax 15s ease-in-out infinite alternate;
+        }
+
+        @keyframes float-parallax {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(50px, 100px) rotate(15deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="magic-bg">
+        <div class="orb w-96 h-96 bg-shophia-plum" style="top: -10%; left: -10%;"></div>
+        <div class="orb w-[500px] h-[500px] bg-shophia-rose" style="bottom: -10%; right: -10%; animation-delay: -5s;">
+        </div>
+        <div class="orb w-80 h-80 bg-shophia-gold" style="top: 40%; left: 60%; animation-delay: -10s;"></div>
+    </div>
+
+    <div class="grid-overlay"></div>
+
+    <div class="scene" id="scene">
+
+        <!-- Floating Beauty Items -->
+        <div class="beauty-float top-[10%] left-[5%] w-64 h-64">
+            <img src="The Signature Lipstick.PNG" class="w-full h-full object-contain animate-float"
+                style="animation-duration: 5s;">
+        </div>
+
+        <div class="beauty-float bottom-[15%] right-[5%] w-64 h-64">
+            <img src="Nail polish.jpeg" class="w-full h-full object-contain animate-float"
+                style="animation-duration: 8s; animation-delay: -1s;">
+        </div>
+
+        <!-- Floating Brand Element -->
+        <div class="float-item bottom-40 right-20" style="animation-delay: 1s;">
+            <span class="text-5xl opacity-20 italic font-serif">Luxury</span>
+        </div>
+
+        <div class="login-card" id="card">
+            <div class="card-content">
+                <div class="text-center mb-16">
+                    <h2 class="font-serif italic text-6xl mb-6" id="form-title">Shophia</h2>
+                    <p class="text-[12px] uppercase tracking-[0.6em] text-shophia-silver" id="form-subtitle">Luxury
+                        Identity Portal</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="input-group">
+                        <input type="email" id="email" placeholder=" " required>
+                        <label for="email">E-mail Address</label>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="password" id="password" placeholder=" " required>
+                        <label for="password">Password</label>
+                    </div>
+
+                    <button class="login-btn" id="submit-btn" onclick="handleSubmit()">Enter Portal</button>
+
+                    <div class="mt-10 text-center">
+                        <p class="text-[9px] uppercase tracking-widest text-white/30" id="toggle-container">
+                            Don't have an identity yet? <br>
+                            <a href="javascript:void(0)" onclick="toggleMode('register')"
+                                class="text-shophia-gold hover:text-white transition-colors">Apply for Membership</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Home link -->
+        <a href="index.html"
+            class="fixed bottom-10 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.3em] text-white/20 hover:text-white transition-all border-b border-transparent hover:border-white pb-1">
+            Back to Showroom
+        </a>
+    </div>
+
+    <script>
+        const card = document.getElementById('card');
+        const scene = document.getElementById('scene');
+
+        scene.addEventListener('mousemove', (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+
+            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+
+        // Reset rotation when mouse leaves
+        scene.addEventListener('mouseleave', () => {
+            card.style.transition = "transform 0.5s ease";
+            card.style.transform = `rotateY(0deg) rotateX(0deg)`;
+        });
+
+        scene.addEventListener('mouseenter', () => {
+            card.style.transition = "none";
+        });
+
+        // Mode Management
+        let currentMode = 'login';
+        const formTitle = document.getElementById('form-title');
+        const formSubtitle = document.getElementById('form-subtitle');
+        const submitBtn = document.getElementById('submit-btn');
+        const toggleContainer = document.getElementById('toggle-container');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+
+        function toggleMode(mode) {
+            currentMode = mode;
+            if (mode === 'register') {
+                formTitle.innerText = "Become a Member";
+                formSubtitle.innerText = "Create Your Luxury Identity";
+                submitBtn.innerText = "Join Shophia";
+                toggleContainer.innerHTML = 'Already have an identity? <br><a href="javascript:void(0)" onclick="toggleMode(\'login\')" class="text-shophia-gold hover:text-white transition-colors">Enter Portal</a>';
+            } else {
+                formTitle.innerText = "Shophia";
+                formSubtitle.innerText = "Luxury Identity Portal";
+                submitBtn.innerText = "Enter Portal";
+                toggleContainer.innerHTML = 'Don\'t have an identity yet? <br><a href="javascript:void(0)" onclick="toggleMode(\'register\')" class="text-shophia-gold hover:text-white transition-colors">Apply for Membership</a>';
+            }
+            emailInput.value = '';
+            passwordInput.value = '';
+        }
+
+        function handleSubmit() {
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            if (!email || !password) {
+                showError("Fields Required");
+                return;
+            }
+
+            if (currentMode === 'register') {
+                // Handle Registration
+                const users = JSON.parse(localStorage.getItem('shophia_users') || '[]');
+                if (users.some(u => u.email === email)) {
+                    showError("Email Already Exists");
+                    return;
+                }
+                users.push({ email, password });
+                localStorage.setItem('shophia_users', JSON.stringify(users));
+
+                submitBtn.innerText = "Success! ✨";
+                submitBtn.style.background = "#D4AF37";
+                setTimeout(() => toggleMode('login'), 1500);
+            } else {
+                // Handle Login
+                const users = JSON.parse(localStorage.getItem('shophia_users') || '[]');
+
+                // Check Admin or Registered Users
+                const isAdmin = (email === "admin@shophia.com" && password === "luxury2026");
+                const isUser = users.some(u => u.email === email && u.password === password);
+
+                if (isAdmin || isUser) {
+                    submitBtn.innerText = "Opening Portal...";
+                    submitBtn.style.background = "#8E5B6E";
+                    submitBtn.style.color = "white";
+
+                    localStorage.setItem('shophia_logged_in', 'true');
+
+                    setTimeout(() => {
+                        window.location.href = "index.html";
+                    }, 1000);
+                } else {
+                    showError("Invalid Credentials");
+                }
+            }
+        }
+
+        function showError(msg) {
+            card.style.animation = "vibrate 0.3s linear";
+            const originalText = submitBtn.innerText;
+            submitBtn.innerText = msg;
+            submitBtn.style.background = "#ff4d4d";
+
+            setTimeout(() => {
+                card.style.animation = "";
+                submitBtn.innerText = originalText === msg ? (currentMode === 'login' ? 'Enter Portal' : 'Join Shophia') : originalText;
+                submitBtn.style.background = "#FFFFFF";
+                submitBtn.style.color = "#000";
+            }, 2000);
+        }
+
+        // Add CSS vibration for error
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes vibrate {
+                0%, 100% { transform: rotateY(0deg) rotateX(0deg); }
+                25% { transform: rotateY(5deg) rotateX(5deg); }
+                75% { transform: rotateY(-5deg) rotateX(-5deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+
+</html>
